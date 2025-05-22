@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Spotify → MP3 Converter</title>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body class="converter-page">
+  <div class="converter-card">
+    <h1>Spotify → MP3</h1>
+    <a href="index.html" class="back-link">← Back to Visualizer</a>
+    <p class="subtitle">Paste a Spotify track URL to download it as MP3</p>
+
+    <form id="conv-form">
+      <div class="input-group">
+        <input
+          type="url"
+          id="spotify-url"
+          name="spotify_url"
+          placeholder="https://open.spotify.com/track/..."
+          required
+        />
+      </div>
+      <button type="submit" class="btn-primary">
+        <span>Convert & Download</span>
+      </button>
+    </form>
+
+    <div id="download-area"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById('conv-form');
+    const downloadArea = document.getElementById('download-area');
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      downloadArea.innerHTML = '';
+
+      // show loading spinner
+      const loading = document.createElement('div');
+      loading.className = 'loading-card';
+      loading.innerHTML = '<div class="spinner"></div><p>Converting…</p>';
+      downloadArea.appendChild(loading);
+
+      // hit Flask /convert
+      const resp = await fetch('/convert', {
+        method: 'POST',
+        headers: {'Content-Type':'application/x-www-form-urlencoded'},
+        body: new URLSearchParams({
+          spotify_url: document.getElementById('spotify-url').value
+        })
+      });
+      const data = await resp.json();
+      downloadArea.innerHTML = '';
+
+      if (data.error) {
+        downloadArea.innerHTML = `<p class="error">❌ ${data.error}</p>`;
+        return;
+      }
+
+      // build the preview card
+      const card = document.createElement('div');
+      card.className = 'track-card';
+      card.innerHTML = `
+        <img src="${data.album_art}" alt="Album art"/>
+        <h2>${data.name}</h2>
+        <h3>${data.artist}</h3>
+        <progress max="100" value="0"></progress>
+      `;
+      downloadArea.appendChild(card);
+
+      // animate progress → then inject a download link
+      const prog = card.querySelector('progress');
+      let pct = 0;
+      const iv = setInterval(() => {
+        if (pct < 100) {
+          pct += 5;
+          prog.value = pct;
+        } else {
+          clearInterval(iv);
+          const dl = document.createElement('a');
+          dl.href = data.download_url;      // ex: "/download/42.mp3"
+          dl.setAttribute('download', '');  // forces save-as
+          dl.className = 'btn-download';
+          dl.textContent = 'Download MP3';
+          card.replaceChild(dl, prog);
+        }
+      }, 150);
+    });
+  </script>
+</body>
+</html>

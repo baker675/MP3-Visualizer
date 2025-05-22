@@ -1,0 +1,291 @@
+/* Base reset & layout */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  background: #111;
+  color: #eee;
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+header {
+  padding: 1rem;
+  text-align: center;
+  background: #222;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.6);
+}
+header h1 { margin-bottom: 0.5rem; }
+header a {
+  color: #4AFF00;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+/* Main content */
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  gap: 1rem;
+}
+
+/* Visualiser toolbar */
+.vis-controls {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  font-size: 0.9rem;
+}
+.vis-controls label {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: #ccc;
+  transition: transform 0.2s;
+}
+.vis-controls label:hover {
+  transform: translateY(-2px);
+}
+#speed-control {
+  width: 120px;
+}
+#speed-display {
+  min-width: 2ch;
+  text-align: right;
+  font-weight: bold;
+  color: #4AFF00;
+}
+
+/* Canvas container with animated gradient background */
+.visualiser {
+  position: relative;
+  width: 100%;
+  height: 60vh;
+  background: linear-gradient(-45deg, #000024, #240024, #002424, #240000);
+  background-size: 400% 400%;
+  animation: gradientAnimate 20s ease infinite;
+  border-radius: 6px;
+  overflow: hidden;
+}
+@keyframes gradientAnimate {
+  0%   { background-position:   0% 50%; }
+  50%  { background-position: 100% 50%; }
+ 100%  { background-position:   0% 50%; }
+}
+#vis-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* File input styling */
+.file-input {
+  text-align: center;
+}
+.file-input input {
+  margin-top: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 4px;
+  border: 1px solid #555;
+  background: #222;
+  color: #eee;
+}
+
+/* Integrated Audio Player Styling */
+.audio-player-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+.audio-player-container audio {
+  width: 100%;
+  max-width: 600px;
+  padding: 0.5rem;
+  background: #222;
+  border: 1px solid #444;
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+  outline: none;
+}
+.audio-player-container audio::-webkit-media-controls-panel {
+  background: #222;
+  border-radius: 4px;
+}
+.audio-player-container audio::-moz-volume-slider {
+  background: #444;
+  border-radius: 4px;
+}
+/* ——— Converter-Only Styles ——— */
+.converter-page {
+  background: linear-gradient(135deg, #121212, #1e1e1e);
+  color: #eee;
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.converter-page .converter-card {
+  background: #1f1f1f;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.7);
+  width: 100%;
+  max-width: 360px;
+  text-align: center;
+}
+
+.converter-page .converter-card h1 {
+  margin: 0;
+  font-size: 1.75rem;
+  letter-spacing: 0.5px;
+}
+
+.converter-page .subtitle {
+  margin: 0.5rem 0 1.5rem;
+  font-size: 0.9rem;
+  color: #bbb;
+}
+
+.converter-page .input-group {
+  margin-bottom: 1rem;
+}
+
+.converter-page .input-group input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 8px;
+  background: #2a2a2a;
+  color: #eee;
+  font-size: 1rem;
+}
+
+.converter-page .input-group input:focus {
+  outline: 2px solid #4aff00;
+  background: #333;
+}
+
+.converter-page .btn-primary {
+  background: #4aff00;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.1s, background 0.2s;
+}
+
+.converter-page .btn-primary:hover {
+  transform: scale(1.03);
+  background: #3ed700;
+}
+
+.converter-page .loading-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.converter-page .spinner {
+  width: 48px;
+  height: 48px;
+  border: 5px solid #333;
+  border-top: 5px solid #4aff00;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.converter-page .error {
+  color: #ff6b6b;
+  margin-top: 1rem;
+}
+
+/* ——— Track Preview Card ——— */
+.converter-page .track-card {
+  background: #2b2b2b;
+  border-radius: 10px;
+  padding: 1.5rem;
+  text-align: center;
+  max-width: 320px;
+  margin: 2rem auto 0;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+}
+
+.converter-page .track-card img {
+  width: 100%;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+}
+
+.converter-page .track-card h2 {
+  margin: 0.5rem 0 0.25rem;
+  font-size: 1.25rem;
+}
+
+.converter-page .track-card h3 {
+  margin: 0;
+  font-size: 1rem;
+  color: #aaa;
+}
+
+.converter-page .track-card progress {
+  width: 100%;
+  height: 1.2rem;
+  border: none;
+  border-radius: 6px;
+  background: #333;
+  overflow: hidden;
+  margin-top: 1rem;
+}
+
+.converter-page .track-card progress::-webkit-progress-bar {
+  background: #333;
+}
+
+.converter-page .track-card progress::-webkit-progress-value {
+  background: #4aff00;
+}
+
+.converter-page .btn-download {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background: #4aff00;
+  color: #111;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: transform 0.1s;
+}
+
+.converter-page .btn-download:hover {
+  transform: scale(1.05);
+  background: #3ed700;
+}
+.converter-page .back-link {
+  display: inline-block;
+  margin: 0.5rem 0 1rem;
+  color: #bbb;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+.converter-page .back-link:hover {
+  color: #4aff00;
+}
+
